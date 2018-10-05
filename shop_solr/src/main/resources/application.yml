@@ -1,6 +1,8 @@
 spring:
   data:
     solr:
-      host: http://192.168.154.130:8080/solr
+#      host: http://192.168.154.130:8080/solr
+       host: http://112.74.43.238:8080/solr
+
 server:
   port: 8082

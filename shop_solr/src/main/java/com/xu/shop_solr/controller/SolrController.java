@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class SolrController {
 
     @RequestMapping("query")
     public String query(String keyword, Model model) {
+        System.out.println("query方法被调用了");
         SolrQuery solrQuery = new SolrQuery();
         //判断关键字是否为空
         if (keyword == null || keyword.trim().equals("")) {
@@ -55,13 +57,14 @@ public class SolrController {
             e.printStackTrace();
         }
 
-        model.addAttribute("list",list);
-        model.addAttribute("keyword",keyword);
+        model.addAttribute("list", list);
+        System.out.println(list);
+        model.addAttribute("keyword", keyword);
         return "searchlist";
     }
 
 
-    @RequestMapping("add")
+    @RequestMapping("goodsadd")
     @ResponseBody
     public boolean solrAdd(@RequestBody Goods goods) {
         //创建一个用于储存于solr库中的对象
@@ -83,6 +86,23 @@ public class SolrController {
             e.printStackTrace();
         }
 
+        return false;
+    }
+
+    @RequestMapping("del")
+    @ResponseBody
+    public boolean solrDel(@RequestParam("id") Integer id) {
+        System.out.println("solrDel被调用了...,id="+id);
+        try {
+            solrClient.deleteById(id + "");
+            solrClient.commit();
+            return true;
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         return false;
     }
 

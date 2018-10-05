@@ -11,4 +11,6 @@ public interface IGoodsService {
     Goods addGoods(Goods goods);
 
     List<Goods> queryNew();
+
+    int delGoods(Integer id);
 }

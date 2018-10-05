@@ -11,20 +11,25 @@ dubbo:
   application:
     name: shop_back
   registry:
-    address: zookeeper://192.168.154.130:2181
+#    address: zookeeper://192.168.154.130:2181
+     address: zookeeper://112.74.43.238:2181
   consumer:
     check: false
-    timeout: 1000
+    timeout: 5000
 image:
-  path: http://192.168.154.130/
+#  path: http://192.168.154.130/
+   path: http://112.74.43.238/
 fdfs:
-  so-timeout: 1000
+  so-timeout: 5000
   thumb-image:
     height: 200
     width: 200
   pool:
     jmx-enabled: false
   tracker-list:
-    - 192.168.154.130:22122
+#    徐龙的虚拟机ip
+#    - 192.168.154.130:22122
+#    梁莎阿里云
+     - 112.74.43.238:22122
 
 

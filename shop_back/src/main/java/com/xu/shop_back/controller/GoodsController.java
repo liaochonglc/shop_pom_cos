@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -56,13 +57,17 @@ public class GoodsController {
         String fullPath = storePath.getFullPath();
         System.out.println("fullPath:" + fullPath);
 
-        goods.setGimage(imgPath + fullPath);
+//       默认储存在全路径
+//        goods.setGimage(imgPath + fullPath);
+
+        //梁莎只储存相对路径
+        goods.setGimage(fullPath);
         //通过主键回填拿到存进数据库的商品对象
         goods = goodsService.addGoods(goods);
 
         //将商品信息存入到solr的索引库中
         String status = HttpClientUtil.sentJsonPost("http://localhost:8082/solr/add", new Gson().toJson(goods));
-        HttpClientUtil.sentJsonPost("http://localhost:8083/item/createhtml",new Gson().toJson(goods));
+        HttpClientUtil.sentJsonPost("http://localhost:8083/item/createhtml", new Gson().toJson(goods));
         System.out.println("status:" + status);
 
 
@@ -71,4 +76,13 @@ public class GoodsController {
     }
 
 
+    @RequestMapping("delgoods")
+    @ResponseBody
+    public String delGoods(Integer id){
+        System.out.println("id-->"+id);
+        System.out.println("delGoods被调用了...");
+        HttpClientUtil.sendParmGet("http://localhost:8082/solr/del?id=" + id);
+        goodsService.delGoods(id);
+        return "ok";
+    }
 }
